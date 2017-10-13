@@ -20,29 +20,51 @@ import warnings
 
 
 class DisjointSets :
-    """Disjoint Set Forests: Representation of disjoint sets of integers from the range [0..N-1].
+    """Disjoint Set Forests: Representation of disjoint sets.
 
-    Disjoint sets of integers from the range [0..size-1] are represented as
-    a disjoint set forest.  This implementation uses both the union by rank heuristic, as well as
+    Disjoint sets of any hashable type represented as disjoint set forest.
+    If any size>1 passed to initializer, then
+    initialized to disjoint sets of integers in the range [0..size-1].
+    This implementation uses both the union by rank heuristic, as well as
     path compression.
     """
 
 
-    def __init__(self, size) :
-        """Initializes disjoint set forest of the integers in interval [0..size-1].
+    def __init__(self, size=0) :
+        """Initializes disjoint set forest.
 
+        If size is 0, initialized to empty forest.  Use make_set to add singleton sets to forest.
+        Elements can be any hashable type.
+
+        If size >= 1, initializes disjoint sets of the integers in interval [0..size-1].
         Each integer from 0 to size - 1 is initially in a set by itself.
 
         Keyword arguments:
-        size -- number of elements in disjoint set forest.  The elements are integers from 0 to size-1.
+        size -- number of elements in disjoint set forest.  If size>0, the elements are integers from 0 to size-1.
+                If size = 0, it is an empty forest to which you can add any hashable type.
         """
 
-        # List of parent nodes, one for each element, in the tree representing
-        # a node's set. Root of tree has itself as parent.
-        self._p = list(range(size))
-        # A node's rank is an upper bound on node height (given chain of parents to root).
-        self._rank = [0] * size
+        self._nodes = {}
+        for i in range(size) :
+            self.make_set(i)
 
+
+    def make_set(self,x) :
+        """Creates a set containing only element x, of any hashable type, adding set to forest.
+
+        
+        Keyword arguments:
+        x -- an element of any hashable type
+        """
+        
+        class Node :
+            pass
+        n = Node()
+        n.data = x
+        n.p = n
+        n.rank = 0
+        self._nodes[x] = n
+        
 
     def union(self,x,y) :
         """Union by rank.
@@ -50,17 +72,17 @@ class DisjointSets :
         Computes the union of the sets containing x and y.
 
         Keyword arguments:
-        x -- an element, an integer in [0,size)
-        y -- an element, an integer in [0,size)
+        x -- an element
+        y -- an element
         """
-        
-        self._link(self.find_set(x), self.find_set(y))
+
+        self._link(self._find_set(self._nodes[x]), self._find_set(self._nodes[y]))
 
 
     def find_set(self,x) :
-        """Finds the set id for a given element, and performs path compression.
+        """Finds the set for a given element, and performs path compression.
 
-        Finds the set id for a given element, where the set id is the root of its
+        Finds the set for a given element, returning the data stored in the root node of its
         tree in the forest.  The find also performs path compression, resetting the parents
         of all nodes along path to root to point directly to root.  Path compression does not
         reset ranks, thus ranks are upper bounds only.
@@ -69,19 +91,36 @@ class DisjointSets :
         x -- the element whose set we want to find
         """
         
-        if x != self._p[x] :
-            self._p[x] = self.find_set(self._p[x])
-        return self._p[x]
+        return self._find_set(self._nodes[x]).data
+        
 
+
+    def _find_set(self,nx) :
+        """Finds the set for a given element, and performs path compression.
+
+        Finds the set for a given element, returning the root node of its
+        tree in the forest.  The find also performs path compression, resetting the parents
+        of all nodes along path to root to point directly to root.  Path compression does not
+        reset ranks, thus ranks are upper bounds only.
+
+        Keyword arguments:
+        nx -- the node of the element whose set we want to find
+        """
+
+        if nx != nx.p :
+            nx.p = self._find_set(nx.p)
+        return nx.p
+        
 
         
-    def _link(self,x,y) :
-        if self._rank[x] > self._rank[y] :
-            self._p[y] = x
+    def _link(self,nx,ny) :
+        if nx.rank > ny.rank :
+            ny.p = nx
         else :
-            self._p[x] = y
-            if self._rank[x] == self._rank[y] :
-                self._rank[y] = self._rank[y] + 1
+            nx.p = ny
+            if nx.rank == ny.rank :
+                ny.rank  = ny.rank  + 1
+
 
 
     warnings.simplefilter("module")
