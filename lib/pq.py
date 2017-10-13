@@ -244,3 +244,51 @@ class PQ :
 
         warnings.warn("isEmpty is replaced with is_empty", DeprecationWarning)
         return self.is_empty()
+
+
+class MaxPQ(PQ) :
+    """A Priority Queue (PQ), with elements extracted max first, implemented with a binary heap.
+
+    A binary max heap is used to implement MaxPQ.  A python dictionary, i.e., associative array,
+    is used to enable changing priorities, as well as removal of any element, in O(lg N) time.
+
+    Elements must be of a hashable type (due to use of Python dictionary).  However, be careful
+    when mutating state of an element that is already in the PQ, and don't change any element property
+    that is used in generating the hash or else you will break the PQ.
+
+    Assuming a PQ with N elements, the runtimes of the operations are as follows.
+
+    The following operations run in O(lg N) time: add, extract_max, change_priority, remove
+
+    The following operations run in O(1) time: peek_max, contains, get_priority, size, is_empty
+    """
+
+    def add(self, element, value) :
+        return super().add(element, -value)
+
+    def peek_min(self) :
+        """peek_min is not supported in a MaxPQ."""
+        
+        raise NotImplementedError("peek_min is not supported in a MaxPQ.")
+
+    def extract_min(self) :
+        """extract_min is not supported in a MaxPQ."""
+        
+        raise NotImplementedError("extract_min is not supported in a MaxPQ.")
+
+    def peek_max(self) :
+        """Returns, but does not remove, the element with the maximum priority value."""
+        
+        return super().peek_min()
+
+    def extract_max(self) :
+        """Removes and returns the element with maximum priority value."""
+        
+        return super().extract_min()
+
+    def get_priority(self, element) :
+        return -super().get_priority(element)
+
+    def change_priority(self, element, value) :
+        return super().change_priority(element, -value)
+    

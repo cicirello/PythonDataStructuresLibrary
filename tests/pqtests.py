@@ -21,6 +21,7 @@ sys.path.append('../lib')
 
 import unittest
 from pq import PQ
+from pq import MaxPQ
 from random import randrange
 
 class TestPQMethods(unittest.TestCase) :
@@ -448,8 +449,178 @@ class TestPQMethods(unittest.TestCase) :
                 for i in range(cap) :
                     if i!=removeMe :
                         self.assertEqual(q.extract_min(), els[i])
+
+
             
-        
+class TestMaxPQMethods(unittest.TestCase) :
+
+    def test_empty(self) :
+        q = MaxPQ()
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_one_element(self) :
+        q = MaxPQ()
+        q.add("a", 5)
+        self.assertEqual(q.size(), 1)
+        self.assertFalse(q.is_empty())
+        self.assertEqual(q.peek_max(), "a")
+        self.assertTrue(q.contains("a"))
+        self.assertEqual(q.get_priority("a"), 5)
+        self.assertEqual(q.size(), 1)
+        self.assertFalse(q.is_empty())
+        self.assertEqual(q.peek_max(), "a")
+        self.assertTrue(q.contains("a"))
+        self.assertTrue(q.change_priority("a", 3))
+        self.assertEqual(q.get_priority("a"), 3)
+        self.assertTrue(q.change_priority("a", 10))
+        self.assertEqual(q.get_priority("a"), 10)
+        self.assertEqual(q.size(), 1)
+        self.assertFalse(q.is_empty())
+        self.assertEqual(q.peek_max(), "a")
+        self.assertTrue(q.contains("a"))
+        self.assertEqual(q.extract_max(), "a")
+        self.assertFalse(q.contains("a"))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_many_elements_added_in_order(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+
+        q = MaxPQ()
+        for i in range(len(els)) :
+            q.add(els[i], priorities[i])
+            self.assertEqual(q.size(), i+1)
+            self.assertTrue(q.contains(els[i]))
+        for i in range(len(els)) :
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_many_elements_added_out_of_order(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+
+        q = MaxPQ()
+        for i in range(-1,-len(els)-1,-1) :
+            q.add(els[i], priorities[i])
+            self.assertEqual(q.size(), -i)
+            self.assertTrue(q.contains(els[i]))
+        for i in range(len(els)) :
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_many_elements_random_order(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+
+        for r in range(len(els),0,-1) :
+            j = randrange(r)
+            i = r-1
+            if i != j :
+                els[i],els[j] = els[j],els[i]
+                priorities[i],priorities[j] = priorities[j],priorities[i]
+
+        q = MaxPQ()
+        for i in range(len(els)) :
+            q.add(els[i], priorities[i])
+            self.assertEqual(q.size(), i+1)
+            self.assertTrue(q.contains(els[i]))
+        for i in range(len(els)) :
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        els.sort()
+        priorities.sort()
+        priorities.reverse()
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_many_elements_change_priority(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+
+        q = MaxPQ()
+        for i in range(len(els)) :
+            q.add(els[i], priorities[i])
+        for p in range(47,0,-5) :
+            self.assertTrue(q.change_priority("a", p))
+            self.assertEqual(q.get_priority("a"), p)
+            if p < 45 :
+                self.assertEqual(q.peek_max(), "b")
+            else :
+                self.assertEqual(q.peek_max(), "a")
+        for p in range(3,55,5) :
+            self.assertTrue(q.change_priority("a", p))
+            self.assertEqual(q.get_priority("a"), p)
+            if p < 45 :
+                self.assertEqual(q.peek_max(), "b")
+            else :
+                self.assertEqual(q.peek_max(), "a")
+        self.assertEqual(q.peek_max(), "a")
+        self.assertTrue(q.change_priority("a", 27))
+        for i in range(1,5) :
+            self.assertEqual(q.extract_max(), els[i])
+        self.assertEqual(q.extract_max(), "a")
+        for i in range(5,len(els)) :
+            self.assertEqual(q.extract_max(), els[i])
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_remove(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+
+        for cap in range(1,len(els)+1) :
+            for removeMe in range(cap) :
+                q = MaxPQ()
+                for i in range(cap) :
+                    q.add(els[i], priorities[i])
+                q.remove(els[removeMe])
+                self.assertEqual(q.size(), cap-1)
+                for i in range(cap) :
+                    if i==removeMe :
+                        self.assertFalse(q.contains(els[i]))
+                    else :
+                        self.assertTrue(q.contains(els[i]))
+                        self.assertEqual(q.get_priority(els[i]), priorities[i])
+                for i in range(cap) :
+                    if i!=removeMe :
+                        self.assertEqual(q.extract_max(), els[i])
+
+    @unittest.expectedFailure
+    def test_peek_min(self) :
+        q = MaxPQ()
+        q.add("a",5)
+        q.peek_min()
+
+    @unittest.expectedFailure
+    def test_extract_min(self) :
+        q = MaxPQ()
+        q.add("a",5)
+        q.extract_min()
+    
 
 if __name__ == '__main__':
     unittest.main()    
