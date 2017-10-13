@@ -1,20 +1,22 @@
-## Python Data Structures Library
+##  Python Data Structures Library
 ##
-## Copyright (C) 2017 Vincent A. Cicirello.
-## http://www.cicirello.org/
+##  Copyright (C) 2017 Vincent A. Cicirello.
+##  http://www.cicirello.org/
 ##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
+##  This program is free software: you can redistribute it and/or modify
+##  it under the terms of the GNU General Public License as published by
+##  the Free Software Foundation, either version 3 of the License, or
+##  (at your option) any later version.
 ##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
+##  This program is distributed in the hope that it will be useful,
+##  but WITHOUT ANY WARRANTY; without even the implied warranty of
+##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##  GNU General Public License for more details.
 ##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+##  You should have received a copy of the GNU General Public License
+##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import warnings
 
 
 class PQ :
@@ -43,7 +45,7 @@ class PQ :
         return len(self._heap)
     
 
-    def isEmpty(self) :
+    def is_empty(self) :
         """Returns True if PQ is empty and False otherwise."""
         
         return len(self._heap) == 0
@@ -67,26 +69,26 @@ class PQ :
             return False
         position = len(self._heap)
         self._heap.append((element, value))
-        self._percolateUp(position)
+        self._percolate_up(position)
         return True
 
     
 
-    def peekMin(self) :
+    def peek_min(self) :
         """Returns, but does not remove, the element with the minimum priority value."""
         
         return self._heap[0][0]
 
     
 
-    def extractMin(self) :
+    def extract_min(self) :
         """Removes and returns the element with minimum priority value."""
         
         minElement = self._heap[0][0]
         oldLast = self._heap.pop()
         if len(self._heap) > 0 :
             self._heap[0] = oldLast
-            self._percolateDown(0)
+            self._percolate_down(0)
         del self._index[minElement]
         return minElement
     
@@ -103,7 +105,7 @@ class PQ :
     
 
 
-    def getPriorityValue(self, element) :
+    def get_priority(self, element) :
         """Gets the current priority of the specified element.
 
         Keyword arguments:
@@ -114,7 +116,7 @@ class PQ :
     
 
 
-    def changePriorityValue(self, element, value) :
+    def change_priority(self, element, value) :
         """Changes the priority of an element in the PQ.
 
         Changes the priority of an element that is in the PQ.
@@ -132,10 +134,10 @@ class PQ :
         position = self._index[element]
         if self._heap[position][1] > value :
             self._heap[position] = (element, value)
-            self._percolateUp(position)
+            self._percolate_up(position)
         elif self._heap[position][1] < value :
             self._heap[position] = (element, value)
-            self._percolateDown(position)
+            self._percolate_down(position)
         return True
         
    
@@ -150,7 +152,7 @@ class PQ :
         return (i-1)//2
         
 
-    def _percolateUp(self, position) :
+    def _percolate_up(self, position) :
         element, value = self._heap[position]
         p = PQ._parent(position)
         while p >= 0 and self._heap[p][1] > self._heap[position][1] :
@@ -161,7 +163,7 @@ class PQ :
             p = PQ._parent(position)
         self._index[element] = position
 
-    def _percolateDown(self, position) :
+    def _percolate_down(self, position) :
         minChildPos = PQ._left(position)
         current = self._heap[position]
         while minChildPos < len(self._heap) :
@@ -178,3 +180,35 @@ class PQ :
         self._index[self._heap[position][0]] = position
 
 
+
+    warnings.simplefilter("module")
+    def changePriorityValue(self, element, value) :
+        """Deprecated"""
+        
+        warnings.warn("changePriorityValue is replaced with change_priority", DeprecationWarning)
+
+        return self.change_priority(element, value)
+
+    def getPriorityValue(self, element) :
+        """Deprecated"""
+
+        warnings.warn("getPriorityValue is replaced with get_priority", DeprecationWarning)
+        return self.get_priority(element)
+
+    def extractMin(self) :
+        """Deprecated"""
+
+        warnings.warn("extractMin is replaced with extract_min", DeprecationWarning)
+        return self.extract_min()
+
+    def peekMin(self) :
+        """Deprecated"""
+        
+        warnings.warn("peekMin is replaced with peek_min", DeprecationWarning)
+        return self.peek_min()
+
+    def isEmpty(self) :
+        """Deprecated"""
+
+        warnings.warn("isEmpty is replaced with is_empty", DeprecationWarning)
+        return self.is_empty()
