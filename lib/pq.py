@@ -23,7 +23,7 @@ class PQ :
     """A Priority Queue (PQ) implemented with a binary heap.
 
     A binary min heap is used to implement a PQ.  A python dictionary, i.e., associative array,
-    is used to enable changing priorities in O(lg N) time.
+    is used to enable changing priorities, as well as removal of any element, in O(lg N) time.
 
     Elements must be of a hashable type (due to use of Python dictionary).  However, be careful
     when mutating state of an element that is already in the PQ, and don't change any element property
@@ -31,9 +31,9 @@ class PQ :
 
     Assuming a PQ with N elements, the runtimes of the operations are as follows.
 
-    The following operations run in O(lg N) time: add, extractMin, changePriority
+    The following operations run in O(lg N) time: add, extract_min, change_priority, remove
 
-    The following operations run in O(1) time: peekMin, contains, getPriorityValue, size, isEmpty
+    The following operations run in O(1) time: peek_min, contains, get_priority, size, is_empty
     """
 
     def __init__(self) :
@@ -142,6 +142,34 @@ class PQ :
         elif self._heap[position][1] < value :
             self._heap[position] = (element, value)
             self._percolate_down(position)
+        return True
+
+
+    def remove(self, element) :
+        """Removes a specified element from the PQ.
+
+        Removes a specified element from the PQ, if it is present.
+        Returns True if element removed, and False if not present in PQ.
+
+        Keyword arguments:
+        element -- The element to remove.
+        """
+
+        if not self.contains(element) :
+            return False
+        position = self._index[element]
+        del self._index[element]
+        if len(self._heap) == 1 :
+            self._heap.pop()
+        elif position == len(self._heap)-1 :
+            self._heap.pop()
+        else :
+            self._heap[position] = self._heap.pop()
+            self._index[self._heap[position][0]] = position
+            if position > 0 and self._heap[position][1] < self._heap[PQ._parent(position)][1] :
+                self._percolate_up(position)
+            else :
+                self._percolate_down(position)
         return True
         
    

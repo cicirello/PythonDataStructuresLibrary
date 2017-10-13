@@ -427,6 +427,28 @@ class TestPQMethods(unittest.TestCase) :
             self.assertEqual(q.extract_min(), els[i])
         self.assertEqual(q.size(), 0)
         self.assertTrue(q.is_empty())
+
+    def test_remove(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+
+        for cap in range(1,len(els)+1) :
+            for removeMe in range(cap) :
+                q = PQ()
+                for i in range(cap) :
+                    q.add(els[i], priorities[i])
+                q.remove(els[removeMe])
+                self.assertEqual(q.size(), cap-1)
+                for i in range(cap) :
+                    if i==removeMe :
+                        self.assertFalse(q.contains(els[i]))
+                    else :
+                        self.assertTrue(q.contains(els[i]))
+                        self.assertEqual(q.get_priority(els[i]), priorities[i])
+                for i in range(cap) :
+                    if i!=removeMe :
+                        self.assertEqual(q.extract_min(), els[i])
+            
         
 
 if __name__ == '__main__':
