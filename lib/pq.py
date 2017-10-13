@@ -23,8 +23,11 @@ class PQ :
     """A Priority Queue (PQ) implemented with a binary heap.
 
     A binary min heap is used to implement a PQ.  A python dictionary, i.e., associative array,
-    is used to enable changing priorities in O(lg N) time.  Elements must be of an immutable type
-    (due to use of Python dictionary).
+    is used to enable changing priorities in O(lg N) time.
+
+    Elements must be of a hashable type (due to use of Python dictionary).  However, be careful
+    when mutating state of an element that is already in the PQ, and don't change any element property
+    that is used in generating the hash or else you will break the PQ.
 
     Assuming a PQ with N elements, the runtimes of the operations are as follows.
 
