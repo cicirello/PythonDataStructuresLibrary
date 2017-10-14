@@ -98,6 +98,17 @@ class DisjointSets :
         """
         
         return self._find_set(self._nodes[x]).data
+
+
+
+    def in_forest(self,x) :
+        """Checks if element is in the set forest.
+
+        Keyword arguments:
+        x -- the element we're checking for containment.
+        """
+
+        return x in self._nodes
         
 
 
