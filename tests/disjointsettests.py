@@ -22,15 +22,21 @@ sys.path.append('../lib')
 import unittest
 from disjointsets import DisjointSets
 
+def init_ds(size) :
+    ds = DisjointSets()
+    for i in range(size) :
+        ds.make_set(i)
+    return ds
+
 class TestDisjointSets(unittest.TestCase) :
 
     def test_one(self):
-        ds = DisjointSets(1)
+        ds = init_ds(1)
         self.assertEqual(ds.find_set(0),0)
         self.assertEqual(ds.find_set(0),0)
 
     def test_two(self):
-        ds = DisjointSets(2)
+        ds = init_ds(2)
         self.assertEqual(ds.find_set(0),0)
         self.assertEqual(ds.find_set(0),0)
         self.assertEqual(ds.find_set(1),1)
@@ -40,11 +46,11 @@ class TestDisjointSets(unittest.TestCase) :
         self.assertEqual(ds.find_set(0),ds.find_set(1))
 
     def test_one_at_a_time(self) :
-        ds = DisjointSets(16)
+        ds = init_ds(16)
         for i in range(16) :
             self.assertEqual(ds.find_set(i),i)
         for to in range(1,16) :
-            ds = DisjointSets(16)
+            ds = init_ds(16)
             for i in range(1,to+1) :
                 ds.union(0,i)
             for i in range(16) :
@@ -59,7 +65,7 @@ class TestDisjointSets(unittest.TestCase) :
                     self.assertEqual(ds.find_set(i),ds.find_set(i))
 
     def test_two_at_a_time(self) :
-        ds = DisjointSets(16)
+        ds = init_ds(16)
         for i in range(0,16,2) :
             ds.union(i,i+1)
         for i in range(15) :
@@ -76,38 +82,38 @@ class TestDisjointSets(unittest.TestCase) :
                 self.assertNotEqual(ds.find_set(i),ds.find_set(i+1))
             for j in range(i+2,16) :
                 self.assertNotEqual(ds.find_set(i),ds.find_set(j))
-        ds = DisjointSets(16)
+        ds = init_ds(16)
         for i in range(0,16,2) :
             ds.union(i,i+1)
         for i in range(0,16,4) :
-            ds.union(i+1,i+2)
+            ds.union(i,i+2)
         for i in range(15) :
             for j in range(i+1,16) :
                 if i//4 == j//4 :
                     self.assertEqual(ds.find_set(i),ds.find_set(j))
                 else :
                     self.assertNotEqual(ds.find_set(i),ds.find_set(j))
-        ds = DisjointSets(16)
+        ds = init_ds(16)
         for i in range(0,16,2) :
             ds.union(i,i+1)
         for i in range(0,16,4) :
-            ds.union(i+1,i+2)
+            ds.union(i,i+2)
         for i in range(0,16,8) :
-            ds.union(i+3,i+6)
+            ds.union(i,i+4)
         for i in range(15) :
             for j in range(i+1,16) :
                 if i//8 == j//8 :
                     self.assertEqual(ds.find_set(i),ds.find_set(j))
                 else :
                     self.assertNotEqual(ds.find_set(i),ds.find_set(j))
-        ds = DisjointSets(16)
+        ds = init_ds(16)
         for i in range(0,16,2) :
             ds.union(i,i+1)
         for i in range(0,16,4) :
-            ds.union(i+1,i+2)
+            ds.union(i,i+2)
         for i in range(0,16,8) :
-            ds.union(i+3,i+6)
-        ds.union(0,15)
+            ds.union(i,i+4)
+        ds.union(0,8)
         for i in range(15) :
             for j in range(i+1,16) :
                 self.assertEqual(ds.find_set(i),ds.find_set(j))

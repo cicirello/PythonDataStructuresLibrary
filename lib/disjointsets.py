@@ -67,9 +67,11 @@ class DisjointSets :
         
 
     def union(self,x,y) :
-        """Union by rank.
+        """Computes the union of the sets containing x and y.
 
-        Computes the union of the sets containing x and y.
+        Uses union by rank heuristic in computing union of sets containing x and y.
+        the "shorter" tree is added as child of "taller" tree.  Though heights are
+        approximate since ranks are upper bounds only.
 
         Keyword arguments:
         x -- an element
@@ -87,6 +89,10 @@ class DisjointSets :
         of all nodes along path to root to point directly to root.  Path compression does not
         reset ranks, thus ranks are upper bounds only.
 
+        Returns a representative member of the set, namely the root of the set's tree.
+        Subsequent calls to the union method may change which element is root, but otherwise
+        no other method change the root elements.
+
         Keyword arguments:
         x -- the element whose set we want to find
         """
@@ -95,25 +101,15 @@ class DisjointSets :
         
 
 
-    def _find_set(self,nx) :
-        """Finds the set for a given element, and performs path compression.
-
-        Finds the set for a given element, returning the root node of its
-        tree in the forest.  The find also performs path compression, resetting the parents
-        of all nodes along path to root to point directly to root.  Path compression does not
-        reset ranks, thus ranks are upper bounds only.
-
-        Keyword arguments:
-        nx -- the node of the element whose set we want to find
-        """
-
+    def _find_set(self, nx) :
+        # perform path compression during the find
         if nx != nx.p :
             nx.p = self._find_set(nx.p)
         return nx.p
         
-
         
-    def _link(self,nx,ny) :
+    def _link(self, nx, ny) :
+        # union by rank heuristic: attach "shorter" tree as child of "taller" tree
         if nx.rank > ny.rank :
             ny.p = nx
         else :
