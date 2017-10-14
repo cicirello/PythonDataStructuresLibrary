@@ -188,6 +188,9 @@ class PQ :
         po2 = 1 << a
         return (i-po2+1)//po2
 
+    def _tree_level(i) :
+        return (i+1).bit_length()-1
+
     def _percolate_up(self, position) :
         element, value = self._heap[position]
         p = PQ._parent(position)
