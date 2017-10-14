@@ -56,6 +56,10 @@ class TestDisjointSets(unittest.TestCase) :
         self.assertTrue(ds.in_forest(0))
         self.assertTrue(ds.in_forest(1))
         self.assertFalse(ds.in_forest(2))
+        ds = init_ds(2)
+        self.assertFalse(ds.in_set(0,1))
+        ds.union(0,1)
+        self.assertTrue(ds.in_set(0,1))
 
     def test_one_at_a_time(self) :
         ds = init_ds(16)
@@ -77,6 +81,12 @@ class TestDisjointSets(unittest.TestCase) :
                     self.assertEqual(ds.find_set(0),ds.find_set(i))
                 else :
                     self.assertEqual(ds.find_set(i),ds.find_set(i))
+        for to in range(1,16) :
+            ds = init_ds(16)
+            for i in range(1,to+1) :
+                self.assertFalse(ds.in_set(i,0))
+                ds.union(0,i)
+                self.assertTrue(ds.in_set(i,0))
 
     def test_two_at_a_time(self) :
         ds = init_ds(16)

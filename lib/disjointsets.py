@@ -109,6 +109,17 @@ class DisjointSets :
         """
 
         return x in self._nodes
+
+
+    def in_set(self, x, s) :
+        """Checks if element x is in the set containing s.
+
+        Keyword arguments:
+        x -- the element we're checking for containment.
+        s -- a representative member of the set we're checking.
+        """
+
+        return self._find_set(self._nodes[x]) == self._find_set(self._nodes[s])
         
 
 
