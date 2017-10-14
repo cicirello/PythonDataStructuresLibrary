@@ -182,7 +182,11 @@ class PQ :
 
     def _parent(i) :
         return (i-1)//2
-        
+
+    def _ancestor(i,a) :
+        # a=0 is itself, a=1 is parent, a=2 is grandparent, etc
+        po2 = 1 << a
+        return (i-po2+1)//po2
 
     def _percolate_up(self, position) :
         element, value = self._heap[position]
