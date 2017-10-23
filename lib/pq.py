@@ -53,7 +53,7 @@ class PQ :
         if len(pairs) > 0 :
             for p in pairs :
                 self._heap.append(p)
-                self._heapify()
+            self._heapify()
 
     def size(self) :
         """Size of the PQ."""
