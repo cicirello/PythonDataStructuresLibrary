@@ -351,6 +351,99 @@ class TestPQMethods(unittest.TestCase) :
         self.assertEqual(q.size(), 0)
         self.assertTrue(q.is_empty())
 
+    def test_merge_larger(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+        init = [ (els[i], priorities[i]) for i in range(3)]
+        pairs = [ (els[i], priorities[i]) for i in range(3,len(els))]
+
+        q = PQ(init)
+        q2 = PQ(pairs)
+        q.merge(q2)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_merge_larger2(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+        init = [ (els[i], priorities[i]) for i in range(7)]
+        pairs = [ (els[i], priorities[i]) for i in range(7,len(els))]
+
+        q = PQ(init)
+        q2 = PQ(pairs)
+        q.merge(q2)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_merge_smaller(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+        init = [ (els[i], priorities[i]) for i in range(3,len(els))]
+        pairs = [ (els[i], priorities[i]) for i in range(3)]
+
+        q = PQ(init)
+        q2 = PQ(pairs)
+        q.merge(q2)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_merge_smaller2(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+        init = [ (els[i], priorities[i]) for i in range(7,len(els))]
+        pairs = [ (els[i], priorities[i]) for i in range(7)]
+
+        q = PQ(init)
+        q2 = PQ(pairs)
+        q.merge(q2)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    
     def test_add_all_in_order(self) :
         els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
         priorities = [ 5*x for x in range(1,11)]
@@ -1021,6 +1114,100 @@ class TestMaxPQMethods(unittest.TestCase) :
             self.assertFalse(q.contains(els[i]))
         self.assertEqual(q.size(), 0)
         self.assertTrue(q.is_empty())
+
+    def test_merge_larger(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+        init = [ (els[i], priorities[i]) for i in range(3)]
+        pairs = [ (els[i], priorities[i]) for i in range(3,len(els))]
+
+        q = MaxPQ(init)
+        q2 = MaxPQ(pairs)
+        q.merge(q2)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_merge_larger2(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+        init = [ (els[i], priorities[i]) for i in range(7)]
+        pairs = [ (els[i], priorities[i]) for i in range(7,len(els))]
+
+        q = MaxPQ(init)
+        q2 = MaxPQ(pairs)
+        q.merge(q2)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_merge_smaller(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+        init = [ (els[i], priorities[i]) for i in range(3,len(els))]
+        pairs = [ (els[i], priorities[i]) for i in range(3)]
+
+        q = MaxPQ(init)
+        q2 = MaxPQ(pairs)
+        q.merge(q2)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_merge_smaller2(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+        init = [ (els[i], priorities[i]) for i in range(7,len(els))]
+        pairs = [ (els[i], priorities[i]) for i in range(7)]
+
+        q = MaxPQ(init)
+        q2 = MaxPQ(pairs)
+        q.merge(q2)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+
 
     @unittest.expectedFailure
     def test_peek_min(self) :

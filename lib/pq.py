@@ -344,7 +344,6 @@ class MaxPQ(PQ) :
                 self._heap.append((el,-val))
             self._heapify()
             
-
     def add(self, element, value) :
         return super().add(element, -value)
 
@@ -357,6 +356,16 @@ class MaxPQ(PQ) :
         else :
             for el,val in pairs :
                 self.add(el,val)
+
+    def merge(self, q) :
+        if len(q._heap) >= len(self._heap) :
+            for el,val in q._heap :
+                if el not in self._index :
+                    self._heap.append((el,val))
+            self._heapify()
+        else :
+            for el,val in q._heap :
+                super().add(el,val)
 
     def peek_min(self) :
         """peek_min is not supported in a MaxPQ."""
