@@ -255,6 +255,28 @@ class PQ :
         self._heap[position] = current
         self._index[self._heap[position][0]] = position
 
+    def _percolate_up_bin_search(self, position) :
+        current_level = PQ._tree_level(position)
+        new_position = self._get_ancestor_insertion_index(position, current_level, 0, current_level)
+        current = self._heap[position]
+        while position != new_position :
+            p = PQ._parent(position)
+            self._heap[position] = self._heap[p]
+            self._index[self._heap[position][0]] = position 
+            position = p
+        self._heap[position] = current
+        self._index[self._heap[position][0]] = position
+
+    def _get_ancestor_insertion_index(self, position, treeLevel, minTreeLevel, maxTreeLevel) :
+        if minTreeLevel >= maxTreeLevel :
+            return PQ._ancestor(position,treeLevel-maxTreeLevel)
+        midTreeLevel = (minTreeLevel + maxTreeLevel) // 2
+        if self._heap[position][1] < self._heap[PQ._ancestor(position,treeLevel-midTreeLevel)][1] :
+            return self._get_ancestor_insertion_index(position, treeLevel, minTreeLevel, midTreeLevel)
+        else :
+            return self._get_ancestor_insertion_index(position, treeLevel, midTreeLevel+1, maxTreeLevel)
+        
+
     def _percolate_down(self, position) :
         minChildPos = PQ._left(position)
         current = self._heap[position]
