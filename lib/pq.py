@@ -192,12 +192,12 @@ class PQ :
     def _percolate_up(self, position) :
         current = self._heap[position]
         p = PQ._parent(position)
-        while p >= 0 and self._heap[p][1] > self._heap[position][1] :
+        while p >= 0 and self._heap[p][1] > current[1] :
             self._heap[position] = self._heap[p]
-            self._index[self._heap[position][0]] = position
-            self._heap[p] = current 
+            self._index[self._heap[position][0]] = position 
             position = p
             p = PQ._parent(position)
+        self._heap[position] = current
         self._index[self._heap[position][0]] = position
 
     def _percolate_down(self, position) :
