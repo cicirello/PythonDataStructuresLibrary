@@ -332,9 +332,14 @@ class MaxPQ(PQ) :
 
     Assuming a PQ with N elements, the runtimes of the operations are as follows.
 
-    The following operations run in O(lg N) time: add, extract_max, change_priority, remove
+    The following operations run in O(lg N) time: add, extract_max, change_priority, remove.
 
-    The following operations run in O(1) time: peek_max, contains, get_priority, size, is_empty
+    The following operations run in O(1) time: peek_max, contains, get_priority, size, is_empty.
+
+    The following operations run in O(N) time: __init__ to initialize PQ with a list of N (element, value) pairs.
+
+    The add_all and merge methods run in O(min(N+k, k lg (N+k))) time where N is the current size of the PQ, and k is the number
+    of new elements.
     """
 
     def __init__(self, pairs=[]) :    
