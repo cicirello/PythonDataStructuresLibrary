@@ -163,8 +163,7 @@ class PQ :
             self._heap.pop()
         else :
             self._heap[position] = self._heap.pop()
-            self._index[self._heap[position][0]] = position
-            if position > 0 and self._heap[position][1] < self._heap[PQ._parent(position)][1] :
+            if position > 0 and self._heap[position][1] <= self._heap[PQ._parent(position)][1] :
                 self._percolate_up(position)
             else :
                 self._percolate_down(position)
