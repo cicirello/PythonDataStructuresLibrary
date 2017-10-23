@@ -131,7 +131,7 @@ class DisjointSets :
         
         
     def _link(self, nx, ny) :
-        # union by rank heuristic: attach "shorter" tree as child of "taller" tree
+        # union by rank heuristic: attach approximately "shorter" tree as child of approximately "taller" tree
         if nx.rank > ny.rank :
             ny.p = nx
         else :
