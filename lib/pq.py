@@ -337,6 +337,14 @@ class MaxPQ(PQ) :
     The following operations run in O(1) time: peek_max, contains, get_priority, size, is_empty
     """
 
+    def __init__(self, pairs=[]) :    
+        super().__init__()
+        if len(pairs) > 0 :
+            for el,val in pairs :
+                self._heap.append((el,-val))
+            self._heapify()
+            
+
     def add(self, element, value) :
         return super().add(element, -value)
 
