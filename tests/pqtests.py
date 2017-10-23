@@ -351,6 +351,72 @@ class TestPQMethods(unittest.TestCase) :
         self.assertEqual(q.size(), 0)
         self.assertTrue(q.is_empty())
 
+    def test_many_init_elements_in_order(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+        pairs = [ (els[i], priorities[i]) for i in range(len(els))]
+
+        q = PQ(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_many_init_elements_out_of_order(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+        pairs = [ (els[i], priorities[i]) for i in range(-1,-len(els)-1,-1)]
+
+        q = PQ(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_many_init_elements_random_order(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+        pairs = [ (els[i], priorities[i]) for i in range(len(els))]
+
+        for r in range(len(pairs),0,-1) :
+            j = randrange(r)
+            i = r-1
+            if i != j :
+                pairs[i],pairs[j] = pairs[j],pairs[i]
+            
+        q = PQ(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
     def test_many_elements_added_out_of_order(self) :
         els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
         priorities = [ 5*x for x in range(1,11)]

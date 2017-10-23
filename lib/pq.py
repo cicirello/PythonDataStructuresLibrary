@@ -34,14 +34,26 @@ class PQ :
     The following operations run in O(lg N) time: add, extract_min, change_priority, remove
 
     The following operations run in O(1) time: peek_min, contains, get_priority, size, is_empty
+
+    The following operations run in O(N) time: __init__ to initialize PQ with a list of N (element, value) pairs
     """
 
-    def __init__(self) :
-        """Initialize an empty PQ."""
+    def __init__(self, pairs=[]) :
+        """Initialize a PQ.
+
+        PQ is empty is pairs is an empty list.  Otherwise, intialized to a heap consisting of the
+        (element, value) pairs in pairs.
+
+        Keyword arguments:
+        pairs -- List of 2-tuples of the form (element, value).
+        """
         
         self._heap = []
         self._index = {}
-
+        if len(pairs) > 0 :
+            for p in pairs :
+                self._heap.append(p)
+                self._heapify()
 
     def size(self) :
         """Size of the PQ."""
@@ -188,6 +200,13 @@ class PQ :
     def _tree_level(i) :
         return (i+1).bit_length()-1
 
+    def _heapify(self) :
+        start = len(self._heap) // 2 - 1
+        for i in range(start, -1, -1) :
+            self._percolate_down_no_index(i)
+        for i, p in enumerate(self._heap) :
+            self._index[p[0]] = i
+
     def _percolate_up(self, position) :
         current = self._heap[position]
         p = PQ._parent(position)
@@ -214,6 +233,20 @@ class PQ :
                  break
         self._heap[position] = current
         self._index[self._heap[position][0]] = position
+
+    def _percolate_down_no_index(self, position) :
+        minChildPos = PQ._left(position)
+        current = self._heap[position]
+        while minChildPos < len(self._heap) :
+            if minChildPos + 1 < len(self._heap) and self._heap[minChildPos + 1][1] < self._heap[minChildPos][1] :
+                minChildPos = minChildPos + 1
+            if self._heap[minChildPos][1] < current[1] :
+                self._heap[position] = self._heap[minChildPos]
+                position = minChildPos
+                minChildPos = PQ._left(position)
+            else :        
+                 break
+        self._heap[position] = current
 
 
 
