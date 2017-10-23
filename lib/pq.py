@@ -31,11 +31,14 @@ class PQ :
 
     Assuming a PQ with N elements, the runtimes of the operations are as follows.
 
-    The following operations run in O(lg N) time: add, extract_min, change_priority, remove
+    The following operations run in O(lg N) time: add, extract_min, change_priority, remove.
 
-    The following operations run in O(1) time: peek_min, contains, get_priority, size, is_empty
+    The following operations run in O(1) time: peek_min, contains, get_priority, size, is_empty.
 
-    The following operations run in O(N) time: __init__ to initialize PQ with a list of N (element, value) pairs
+    The following operations run in O(N) time: __init__ to initialize PQ with a list of N (element, value) pairs.
+
+    The add_all and merge methods run in O(min(N+k, k lg (N+k))) time where N is the current size of the PQ, and k is the number
+    of new elements.
     """
 
     def __init__(self, pairs=[]) :
@@ -45,7 +48,7 @@ class PQ :
         (element, value) pairs in pairs.
 
         Keyword arguments:
-        pairs -- List of 2-tuples of the form (element, value).
+        pairs -- List of 2-tuples of the form (element, value)where value is the priority of element.
         """
         
         self._heap = []
@@ -54,6 +57,7 @@ class PQ :
             for p in pairs :
                 self._heap.append(p)
             self._heapify()
+
 
     def size(self) :
         """Size of the PQ."""
@@ -67,7 +71,6 @@ class PQ :
         return len(self._heap) == 0
 
 
-    
     def add(self, element, value) :
         """Adds an element to the PQ with a specified priority.
 
@@ -88,8 +91,42 @@ class PQ :
         self._percolate_up(position)
         return True
 
-    
 
+    def add_all(self, pairs) :
+        """Adds a a list of (element, value) pairs to the PQ.
+
+        Adds the (element, value) pairs from the list pairs to the PQ.  Only the
+        pairs for which element is not already in the PQ are added.
+
+        Keyword arguments:
+        pairs -- A list of 2-tuples of the form (element, value) where value is the priority of element.
+        """
+
+        if len(pairs) >= len(self._heap) :
+            for p in pairs :
+                if p[0] not in self._index :
+                    self._heap.append(p)
+            self._heapify()
+        else :
+            for el,val in pairs :
+                self.add(el,val)
+
+                
+
+    def merge(self, q) :
+        """Merges a PQ into this PQ.
+
+        Adds all (element, value) pairs from a given PQ to this PQ.  Only the
+        pairs for which element is not already in this PQ are added (duplicates are exluded).
+
+        Keyword arguments:
+        q -- A PQ to merge with this one.  q is not changed.
+        """
+
+        self.add_all(q._heap)
+        
+
+        
     def peek_min(self) :
         """Returns, but does not remove, the element with the minimum priority value."""
         
