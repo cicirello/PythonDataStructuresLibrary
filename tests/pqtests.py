@@ -22,7 +22,7 @@ sys.path.append('../lib')
 import unittest
 from pq import PQ
 from pq import MaxPQ
-from random import randrange
+from random import randrange, shuffle
 
 class TestPQMethods(unittest.TestCase) :
 
@@ -341,6 +341,146 @@ class TestPQMethods(unittest.TestCase) :
             q.add(els[i], priorities[i])
             self.assertEqual(q.size(), i+1)
             self.assertTrue(q.contains(els[i]))
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_add_all_in_order(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+        inInit = [ False, False, True, True, False, False, True, True, False, False]
+        init = [ (els[i], priorities[i]) for i in range(len(els)) if inInit[i]]
+        pairs = [ (els[i], priorities[i]) for i in range(len(els)) if not inInit[i]]
+
+        q = PQ(init)
+        q.add_all(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_add_all_in_order2(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+        inInit = [ False, False, True, True, False, False, True, True, False, False]
+        init = [ (els[i], priorities[i]) for i in range(len(els)) if not inInit[i]]
+        pairs = [ (els[i], priorities[i]) for i in range(len(els)) if inInit[i]]
+
+        q = PQ(init)
+        q.add_all(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_add_all_out_of_order(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+        inInit = [ False, False, True, True, False, False, True, True, False, False]
+        init = [ (els[i], priorities[i]) for i in range(-1,-len(els)-1,-1) if inInit[i]]
+        pairs = [ (els[i], priorities[i]) for i in range(-1,-len(els)-1,-1) if not inInit[i]]
+
+        q = PQ(init)
+        q.add_all(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_add_all_out_of_order2(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+        inInit = [ False, False, True, True, False, False, True, True, False, False]
+        init = [ (els[i], priorities[i]) for i in range(-1,-len(els)-1,-1) if not inInit[i]]
+        pairs = [ (els[i], priorities[i]) for i in range(-1,-len(els)-1,-1) if inInit[i]]
+
+        q = PQ(init)
+        q.add_all(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_add_all_random_order(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+        inInit = [ False, False, True, True, False, False, True, True, False, False]
+        init = [ (els[i], priorities[i]) for i in range(len(els)) if inInit[i]]
+        pairs = [ (els[i], priorities[i]) for i in range(len(els)) if not inInit[i]]
+        shuffle(pairs)
+
+        q = PQ(init)
+        q.add_all(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_min(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_add_all_random_order2(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*x for x in range(1,11)]
+        inInit = [ False, False, True, True, False, False, True, True, False, False]
+        init = [ (els[i], priorities[i]) for i in range(len(els)) if not inInit[i]]
+        pairs = [ (els[i], priorities[i]) for i in range(len(els)) if inInit[i]]
+        shuffle(pairs)
+
+        q = PQ(init)
+        q.add_all(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
         for i in range(len(els)) :
             self.assertEqual(q.peek_min(), els[i])
             self.assertEqual(q.size(), len(els)-i)
@@ -741,6 +881,146 @@ class TestMaxPQMethods(unittest.TestCase) :
                 for i in range(cap) :
                     if i!=removeMe :
                         self.assertEqual(q.extract_max(), els[i])
+
+    def test_add_all_in_order(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+        inInit = [ False, False, True, True, False, False, True, True, False, False]
+        init = [ (els[i], priorities[i]) for i in range(len(els)) if inInit[i]]
+        pairs = [ (els[i], priorities[i]) for i in range(len(els)) if not inInit[i]]
+
+        q = MaxPQ(init)
+        q.add_all(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_add_all_out_of_order(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+        inInit = [ False, False, True, True, False, False, True, True, False, False]
+        init = [ (els[i], priorities[i]) for i in range(-1,-len(els)-1,-1) if inInit[i]]
+        pairs = [ (els[i], priorities[i]) for i in range(-1,-len(els)-1,-1) if not inInit[i]]
+
+        q = MaxPQ(init)
+        q.add_all(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_add_all_random_order(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+        inInit = [ False, False, True, True, False, False, True, True, False, False]
+        init = [ (els[i], priorities[i]) for i in range(len(els)) if inInit[i]]
+        pairs = [ (els[i], priorities[i]) for i in range(len(els)) if not inInit[i]]
+        shuffle(pairs)
+
+        q = MaxPQ(init)
+        q.add_all(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_add_all_in_order2(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+        inInit = [ False, False, True, True, False, False, True, True, False, False]
+        init = [ (els[i], priorities[i]) for i in range(len(els)) if not inInit[i]]
+        pairs = [ (els[i], priorities[i]) for i in range(len(els)) if inInit[i]]
+
+        q = MaxPQ(init)
+        q.add_all(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_add_all_out_of_order2(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+        inInit = [ False, False, True, True, False, False, True, True, False, False]
+        init = [ (els[i], priorities[i]) for i in range(-1,-len(els)-1,-1) if not inInit[i]]
+        pairs = [ (els[i], priorities[i]) for i in range(-1,-len(els)-1,-1) if inInit[i]]
+
+        q = MaxPQ(init)
+        q.add_all(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
+
+    def test_add_all_random_order2(self) :
+        els = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+        priorities = [ 5*(11-x) for x in range(1,11)]
+        inInit = [ False, False, True, True, False, False, True, True, False, False]
+        init = [ (els[i], priorities[i]) for i in range(len(els)) if not inInit[i]]
+        pairs = [ (els[i], priorities[i]) for i in range(len(els)) if inInit[i]]
+        shuffle(pairs)
+
+        q = MaxPQ(init)
+        q.add_all(pairs)
+        self.assertEqual(q.size(), len(els))
+        for i in range(len(els)) :
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.get_priority(els[i]), priorities[i])
+        for i in range(len(els)) :
+            self.assertEqual(q.peek_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i)
+            self.assertTrue(q.contains(els[i]))
+            self.assertEqual(q.extract_max(), els[i])
+            self.assertEqual(q.size(), len(els)-i-1)
+            self.assertFalse(q.contains(els[i]))
+        self.assertEqual(q.size(), 0)
+        self.assertTrue(q.is_empty())
 
     @unittest.expectedFailure
     def test_peek_min(self) :

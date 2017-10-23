@@ -348,6 +348,16 @@ class MaxPQ(PQ) :
     def add(self, element, value) :
         return super().add(element, -value)
 
+    def add_all(self, pairs) :
+        if len(pairs) >= len(self._heap) :
+            for el,val in pairs :
+                if el not in self._index :
+                    self._heap.append((el,-val))
+            self._heapify()
+        else :
+            for el,val in pairs :
+                self.add(el,val)
+
     def peek_min(self) :
         """peek_min is not supported in a MaxPQ."""
         
