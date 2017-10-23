@@ -190,15 +190,15 @@ class PQ :
         return (i+1).bit_length()-1
 
     def _percolate_up(self, position) :
-        element, value = self._heap[position]
+        current = self._heap[position]
         p = PQ._parent(position)
         while p >= 0 and self._heap[p][1] > self._heap[position][1] :
             self._heap[position] = self._heap[p]
             self._index[self._heap[position][0]] = position
-            self._heap[p] = (element, value)
+            self._heap[p] = current 
             position = p
             p = PQ._parent(position)
-        self._index[element] = position
+        self._index[self._heap[position][0]] = position
 
     def _percolate_down(self, position) :
         minChildPos = PQ._left(position)
