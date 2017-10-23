@@ -159,9 +159,7 @@ class PQ :
             return False
         position = self._index[element]
         del self._index[element]
-        if len(self._heap) == 1 :
-            self._heap.pop()
-        elif position == len(self._heap)-1 :
+        if len(self._heap) == 1 or position == len(self._heap)-1 :
             self._heap.pop()
         else :
             self._heap[position] = self._heap.pop()
