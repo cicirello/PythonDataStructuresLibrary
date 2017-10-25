@@ -29,6 +29,7 @@ class DisjointSets :
     path compression.
     """
 
+    __slots__ = ["_nodes"]
 
     def __init__(self, size=0) :
         """Initializes disjoint set forest.
@@ -148,7 +149,3 @@ class DisjointSets :
 class _DJSetNode :
     __slots__ = ['data','p','rank']
 
-
-
-            
-            
