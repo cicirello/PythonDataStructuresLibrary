@@ -41,6 +41,8 @@ class PQ :
     of new elements.
     """
 
+    __slots__ = ['_heap', '_index']
+
     def __init__(self, pairs=[]) :
         """Initialize a PQ.
 
@@ -419,4 +421,4 @@ class MaxPQ(PQ) :
 
     def change_priority(self, element, value) :
         return super().change_priority(element, -value)
-    
+
