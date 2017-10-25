@@ -56,10 +56,8 @@ class DisjointSets :
         Keyword arguments:
         x -- an element of any hashable type
         """
-        
-        class Node :
-            pass
-        n = Node()
+
+        n = _DJSetNode()
         n.data = x
         n.p = n
         n.rank = 0
@@ -122,7 +120,6 @@ class DisjointSets :
         return self._find_set(self._nodes[x]) == self._find_set(self._nodes[s])
         
 
-
     def _find_set(self, nx) :
         # perform path compression during the find
         if nx != nx.p :
@@ -146,3 +143,12 @@ class DisjointSets :
         warnings.warn("findSet is replaced with find_set", DeprecationWarning)
         
         return self.find_set(x)
+
+
+class _DJSetNode :
+    __slots__ = ['data','p','rank']
+
+
+
+            
+            
