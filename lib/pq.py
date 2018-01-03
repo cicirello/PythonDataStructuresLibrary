@@ -16,9 +16,6 @@
 ##  You should have received a copy of the GNU General Public License
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import warnings
-
-
 class PQ :
     """A Priority Queue (PQ) implemented with a binary heap.
 
@@ -311,37 +308,6 @@ class PQ :
 
 
 
-    warnings.simplefilter("module")
-    def changePriorityValue(self, element, value) :
-        """Deprecated"""
-        
-        warnings.warn("changePriorityValue is replaced with change_priority", DeprecationWarning)
-
-        return self.change_priority(element, value)
-
-    def getPriorityValue(self, element) :
-        """Deprecated"""
-
-        warnings.warn("getPriorityValue is replaced with get_priority", DeprecationWarning)
-        return self.get_priority(element)
-
-    def extractMin(self) :
-        """Deprecated"""
-
-        warnings.warn("extractMin is replaced with extract_min", DeprecationWarning)
-        return self.extract_min()
-
-    def peekMin(self) :
-        """Deprecated"""
-        
-        warnings.warn("peekMin is replaced with peek_min", DeprecationWarning)
-        return self.peek_min()
-
-    def isEmpty(self) :
-        """Deprecated"""
-
-        warnings.warn("isEmpty is replaced with is_empty", DeprecationWarning)
-        return self.is_empty()
 
 
 class MaxPQ(PQ) :
