@@ -50,7 +50,7 @@ class PQ :
         (element, value) pairs in pairs.
 
         Keyword arguments:
-        pairs -- List of 2-tuples of the form (element, value)where value is the priority of element.
+        pairs -- List of 2-tuples of the form (element, value) where value is the priority of element.
         """
         
         self._heap = []
