@@ -16,8 +16,6 @@
 ##  You should have received a copy of the GNU General Public License
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import warnings
-
 
 class DisjointSets :
     """Disjoint Set Forests: Representation of disjoint sets.
@@ -139,11 +137,6 @@ class DisjointSets :
 
 
 
-    warnings.simplefilter("module")
-    def findSet(self,x) :
-        warnings.warn("findSet is replaced with find_set", DeprecationWarning)
-        
-        return self.find_set(x)
 
 
 class _DJSetNode :
